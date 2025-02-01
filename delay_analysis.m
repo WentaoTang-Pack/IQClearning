@@ -21,21 +21,18 @@ for i = 1:m
 end
 
 omegas = logspace(-2, 2, 101); 
-[M1, rho1, xi1] = util_ocsvm(gam, 0.05, m, 3);
+[M1, rho1, xi1] = util_ocsvm(gam, 0.01);
 psi_found1 = util_frequency_evaluate(M1, [g0, g1, g2], omegas);
-
-
-% [M2, rho2, xi2] = ocsvm(gam, 0.2, m, 3);
-% psi_found2 = util_frequency_evaluate(M2, [g0, g1, g2], omegas);
-% [M3, rho3, xi3] = ocsvm(gam, 0.8, m, 3);
+[M2, rho2, xi2] = util_ocsvm(gam, 0.05);
+psi_found2 = util_frequency_evaluate(M2, [g0, g1, g2], omegas);
+% [M3, rho3, xi3] = util_ocsvm(gam, 0.8, m, 3);
 % psi_found3 = util_frequency_evaluate(M3, [g0, g1, g2], omegas);
 
 psi_theor = 4*sin(omegas*delay/2).^2 .* (omegas<pi/delay) + 4*(omegas>=pi/delay); 
 psi_megre = (4*omegas.^4 + 50*omegas.^2) ./ (omegas.^4 + 6.5*omegas.^2 + 50);
 figure; semilogx(omegas, psi_theor, 'k', omegas, psi_megre, '--k');
 hold on, semilogx(omegas, psi_found1, 'Color', [0.8500 0.3250 0.0980]);
-hold on, semilogx(omegas, psi_found2, 'm');
-% hold on, semilogx(omegas, psi_found3, 'r');
-legends = {'Actual', 'Megretski-Rantzer', 'Learned', 'Learned (Butterworth)'};
+hold on, semilogx(omegas, psi_found2, 'm')
+legends = {'Actual', 'Megretski-Rantzer', 'Learned ($\nu=0.01$)', 'Learned ($\nu=0.05$)'};
 legend(legends, 'interpreter', 'latex'); 
 xlabel('$\omega$', 'Interpreter', 'latex'), ylabel('$\ell(j\omega)$', 'Interpreter', 'latex'); 

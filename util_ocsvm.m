@@ -1,5 +1,5 @@
-function [M, rho, xi] = ocsvm(gam, nu, m, gsize)
-nu = 0.01; a = 1/(nu*m); 
+function [M, rho, xi] = util_ocsvm(gam, nu)
+m = size(gam, 1); gsize = size(gam, 2) - 1; a = 1/(nu*m); 
 cvx_begin
     variable rho nonnegative;
     variable M(gsize, gsize) semidefinite;
